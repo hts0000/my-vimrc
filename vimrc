@@ -13,9 +13,16 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 
-set list
+" 显示空白字符
+" set list
 set scrolloff=5
 set backspace=indent,eol,start
+
+" 设置vim页面刷新到缓冲区的时间
+" 有些实时监测页面状态的插件希望这个时间越短越好
+" 时间越短实时效果越好
+" 单位ms
+set updatetime=100
 
 " 插入模式和normal模式光标不一样
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -86,6 +93,7 @@ noremap <LEADER>tn :tabn<CR>
 " 跳转上一标签页
 noremap <LEADER>tb :tabp<CR>
 
+" 打开/关闭NerdTree文件树预览
 noremap <LEADER>ft :NERDTreeToggle<CR>
 
 call plug#begin()
@@ -99,12 +107,32 @@ Plug 'preservim/nerdtree' |
             \ Plug 'Xuyuanp/nerdtree-git-plugin' |
             \ Plug 'ryanoasis/vim-devicons' " need nerd fonts https://github.com/ryanoasis/nerd-fonts#font-installation
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+" If you don't have nodejs and yarn
+" use pre build, add 'vim-plug' to the filetype list so vim-plug can update this plugin
+" see: https://github.com/iamcco/markdown-preview.nvim/issues/50
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
 call plug#end()
+
+" set to 1, nvim will open the preview window after entering the markdown buffer
+" default: 0
+let g:mkdp_auto_start = 1
+
+" specify browser to open preview page
+" default: ''
+let g:mkdp_browser = ''
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
 " Start NERDTree and put the cursor back in the other window.
 autocmd VimEnter * NERDTree | wincmd p
+
 " Open the existing NERDTree on each new tab.
 autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
 
