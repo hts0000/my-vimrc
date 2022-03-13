@@ -116,7 +116,10 @@ noremap <LEADER>tn :tabn<CR>
 noremap <LEADER>tb :tabp<CR>
 
 " 打开/关闭NerdTree文件树预览
-noremap <LEADER>ft :NERDTreeToggle<CR>
+noremap <F9> :NERDTreeToggle<CR>
+
+" 打开/关闭markdown预览
+noremap <F7> :MarkdownPreviewToggle<CR>
 
 call plug#begin()
 Plug 'vim-airline/vim-airline'
