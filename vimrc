@@ -8,10 +8,27 @@ filetype plugin indent on
 
 set encoding=utf-8
 
-set expandtab
+set noexpandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
+
+" vim下复制粘贴操作支持系统剪切板
+" 通过+寄存器实现
+set clipboard=unnamed
+
+" ==== 系统剪切板复制粘贴 ====
+" <M-c> 即为 Alt+c
+" v 模式下复制内容到系统剪切板
+" vmap <M-c> "+yy
+" n 模式下复制一行到系统剪切板
+" nmap <M-c> "+yy
+" n 模式下粘贴系统剪切板的内容
+" nmap <M-v> "+p
+
+" WSL限定
+" 可视模式下将选择的内容通过clip.exe程序复制到系统剪切板
+vmap <LEADER>y :!clip.exe<cr>u''
 
 " 显示空白字符
 " set list
@@ -23,6 +40,9 @@ set backspace=indent,eol,start
 " 时间越短实时效果越好
 " 单位ms
 set updatetime=100
+
+" 退出插入模式指定类型的文件自动保存
+au InsertLeave *.go,*.sh,*.md write
 
 " 插入模式和normal模式光标不一样
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -36,6 +56,7 @@ set autochdir
 " === 上次打开文件光标所在地方
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+syntax enable
 syntax on
 set number
 set laststatus=2
@@ -49,6 +70,7 @@ exec "nohlsearch"
 set incsearch
 set ignorecase
 set smartcase
+set showmatch
 
 " 256位颜色支持
 set t_Co=256
@@ -118,11 +140,14 @@ call plug#end()
 
 " set to 1, nvim will open the preview window after entering the markdown buffer
 " default: 0
-let g:mkdp_auto_start = 1
+let g:mkdp_auto_start = 0
 
 " specify browser to open preview page
 " default: ''
 let g:mkdp_browser = ''
+
+" 忽略一下文件的显示
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
