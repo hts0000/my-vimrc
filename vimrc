@@ -41,6 +41,10 @@ set backspace=indent,eol,start
 " 单位ms
 set updatetime=100
 
+" 关闭蜂鸣声
+set visualbell
+set t_vb=
+
 " 退出插入模式指定类型的文件自动保存
 au InsertLeave *.go,*.sh,*.md write
 
